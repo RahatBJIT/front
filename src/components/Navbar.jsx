@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { theme } from "../theme/theme";
 import { Menu, MenuItem, Badge, Box, InputBase, Container, Stack, AppBar, Toolbar, Typography, styled } from "@mui/material";
 import { Mail, Notifications } from "@mui/icons-material";
 import { Avatar } from '../../node_modules/@mui/material/index';
+import { LoginContext } from '../context/LoginContex';
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between"
@@ -34,9 +35,21 @@ const UserBox = styled(Box)(({ theme }) => ({
   }
 }))
 
-const Navbar = ({courseNumber, onClose }) => {
+const Navbar = ({ courseNumber, onClose }) => {
+
+  const { loggedIn, setLoggedIn } = useContext(LoginContext);
+
+  const logout = () => {
+     window.localStorage.removeItem("tss-token")
+
+    setLoggedIn(false);
+
+  }
 
   const [open, setOpen] = useState(false);
+
+
+
 
 
   return (
@@ -44,14 +57,14 @@ const Navbar = ({courseNumber, onClose }) => {
       <StyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>Trainee Selection System</Typography>
 
-        <Typography onClick={()=>onClose()} variant="h6" sx={{ display: { xs: "block", sm: "none" } }} >TSS</Typography>
+        <Typography onClick={() => onClose()} variant="h6" sx={{ display: { xs: "block", sm: "none" } }} >TSS</Typography>
         <Search><InputBase placeholder='Search..' /></Search>
         <Icons>
 
           <Badge badgeContent={4} color="error">
             <Mail />
           </Badge>
-          <Badge badgeContent={courseNumber?courseNumber:0} color="error">
+          <Badge badgeContent={courseNumber ? courseNumber : 0} color="error">
             <Notifications />
           </Badge>
 
@@ -71,20 +84,15 @@ const Navbar = ({courseNumber, onClose }) => {
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
-        open={open}
+        open={false}
         onClose={e => { setOpen(false) }}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
         }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
+      
       >
-        <MenuItem >Profile</MenuItem>
-        <MenuItem >My account</MenuItem>
-        <MenuItem >Logout</MenuItem>
+   
       </Menu>
     </AppBar>
 

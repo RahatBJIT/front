@@ -43,44 +43,10 @@ const EnrollButton = styled(Button)(({ theme }) => ({
   fontWeight: 600,
 }));
 
-const courses12 = [
-  {
-    id: 1,
-    title: 'Web Development',
-    description: 'Learn to build modern web applications.',
-    imageUrl: 'https://via.placeholder.com/300x180',
-  },
-  {
-    id: 2,
-    title: 'Data Science',
-    description: 'Master data analysis and machine learning.',
-    imageUrl: 'https://via.placeholder.com/300x180',
-  },
-  {
-    id: 3,
-    title: 'Mobile App Development',
-    description: 'Create amazing mobile apps for iOS and Android.',
-    imageUrl: 'https://via.placeholder.com/300x180',
-  },
-  {
-    id: 4,
-    title: 'Data Science',
-    description: 'Master data analysis and machine learning.',
-    imageUrl: 'https://via.placeholder.com/300x180',
-  },
-  {
-    id: 5,
-    title: 'Mobile App Development',
-    description: 'Create amazing mobile apps for iOS and Android.',
-    imageUrl: 'https://via.placeholder.com/300x180',
-  },
-  // Add more courses here...
-];
 
 
 const AllCourses = ({courses}) => {
 
-  console.log(courses?.data.data.listResponse);
   return (
     <Box mt={4} >
       <Grid container spacing={2}>

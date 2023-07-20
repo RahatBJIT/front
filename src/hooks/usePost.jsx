@@ -1,24 +1,24 @@
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 
-const useFetch = (url) => {
-    // console.log("Fetching " + url);
+const useUsePost = (url, postData) => {
+    console.log("Posting to " + url);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         setLoading(true);
-        // console.log("Loding Started " );
+        console.log("Posting Started " );
 
-        axios.get(url).then((response) => {
+        axios.post(url, postData).then((response) => {
                 setData(response);
         }).catch((err) => {
             setError(err);
         }).finally(() => {
 
             setLoading(false);
-            // console.log("Loding Finished " );
+            console.log("Posting Finished " );
 
 
         })
@@ -26,4 +26,4 @@ const useFetch = (url) => {
 
     return { data, loading, error };
 }
-export default useFetch;
+export default useUsePost;

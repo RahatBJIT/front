@@ -1,11 +1,38 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+// import usePost from '../hooks/usePost';
+import axios from '../api/axios';
+import Alert from 'react-bootstrap/Alert';
+import { useNavigate } from '../../node_modules/react-router-dom/dist/index';
+import { LoginContext } from '../context/LoginContex';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
+
+  const { loggedIn, setLoggedIn } = useContext(LoginContext);
+
+  if (loggedIn) {
+    console.log("Your are logged in redirecting to home ");
+    navigate("/");
+
+  }
+
+
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState(null);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  // const isLogedIn=()=>{
+  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -14,16 +41,83 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    // console.log(formData);
+
+
+    setLoading(true);
+
+    axios.post("/api/auth/login", formData,).then((response) => {
+      setData(response);
+    }).catch((err) => {
+      setError(err);
+    }).finally(() => {
+
+      setLoading(false);
+      // console.log("Posting Finished ");
+
+    })
   };
+
+  useEffect(() => {
+    if (data) {
+      // console.log(data);
+      if (data.status === 200) {
+        setSuccessMessage(data.data.successMessage)
+
+        window.localStorage.setItem("tss-token", data.data.data.token)
+
+        setTimeout(() => {
+          setSuccessMessage(null);
+          setLoggedIn(true)
+          navigate("/");
+
+        }, 2000);
+      }
+      else {
+        console.log(data);
+      }
+    }
+    if (error) {
+      setErrorMessage(error.response.data.errorMessage);
+      setTimeout(() => {
+        setErrorMessage("");
+
+
+      }, 2000);
+
+    }
+
+  }, [loading])
+
+
+
+
+
 
   return (
     <Container className="mt-5">
       <Row className="justify-content-center">
         <Col lg={12}>
           <Form onSubmit={handleSubmit}>
+            {successMessage &&
+              <Alert key="success" variant="success">
+                {successMessage}
+              </Alert>
+            }
+            {
+
+              !successMessage && (
+
+                errorMessage &&
+                <Alert key="success" variant="danger">
+                  {errorMessage}
+                </Alert>
+              )
+            }
+
             <Form.Group controlId="email">
               <Form.Label>Email Address</Form.Label>
+
               <Form.Control
                 type="email"
                 name="email"
@@ -44,9 +138,11 @@ const LoginForm = () => {
               />
             </Form.Group>
 
-            <Button className="mt-3 p-2" variant="primary" type="submit" block>
+            <Button className="mt-3 p-2" variant="primary" type="submit" block="true">
               Login
             </Button>
+
+
           </Form>
         </Col>
       </Row>
