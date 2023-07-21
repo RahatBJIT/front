@@ -16,6 +16,20 @@ function App() {
   const { data, loading, error } = useFetch("api/course");
 
   const [role, setRole] = useState("");
+  const [courses, setCourses] = useState({});
+
+  const [appliedCoursesGlobal  , setappliedCoursesGlobal  ] = useState(0)
+
+  useEffect(() => {
+    setCourses(data?.data?.data?.listResponse)
+ 
+  }, [data])
+
+useEffect(() => {
+  console.log(courses);
+}, [courses])
+
+  
  
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -23,6 +37,7 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [errorss, setError] = useState(null);
   const [uploaded, setUploaded] = useState(false)
+
 
   useEffect(() => {
     if (window.localStorage.getItem("uploadedfortss")==null) {
@@ -36,10 +51,12 @@ function App() {
 
   }, [])
   
+useEffect(() => {
+  console.log("The userData is :");
+  console.log(userData);
 
-  
 
- 
+}, [userData])
 
 
   
@@ -50,7 +67,10 @@ function App() {
         Authorization: `Bearer ${token}`,
       },
     }).then((response) => {
-      setUserData(response);
+      setUserData(response.data.data.data);
+
+      console.log("Response is :");
+      console.log(response);
       if (response.status==200) {
 
         setRole(response.data.data.role)
@@ -109,7 +129,7 @@ function App() {
   return (
 
     <Box >
-      <LoginContext.Provider value={{uploaded , setUploaded, userData, setUserData, loggedIn, setLoggedIn ,role, setRole}}>
+      <LoginContext.Provider value={{appliedCoursesGlobal  , setappliedCoursesGlobal ,courses, setUserData, userData, uploaded , setUploaded, userData, setUserData, loggedIn, setLoggedIn ,role, setRole}}>
 
         <Navbar courseNumber={data?.data.data.dataLength} onClose={toggleSideBar} />
         <Stack direction="row" spacing={2} justifyContent="space-between">

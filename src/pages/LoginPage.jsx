@@ -10,7 +10,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
 
-  const { loggedIn, setLoggedIn } = useContext(LoginContext);
+  const { loggedIn, setLoggedIn , setRole } = useContext(LoginContext);
 
   if (loggedIn) {
     console.log("Your are logged in redirecting to home ");
@@ -69,6 +69,7 @@ const LoginForm = () => {
         setTimeout(() => {
           setSuccessMessage(null);
           setLoggedIn(true)
+          setRole(data.data.data.role)
           navigate("/");
 
         }, 2000);

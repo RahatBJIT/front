@@ -29,7 +29,7 @@ const HomePage = ({ data }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Link to="/courses" >
+        <Link to="/course" >
           <Typography color="royalblue"  variant="Button" size="small" >See Avaialable Courses</Typography>
         </Link>
       </CardActions>

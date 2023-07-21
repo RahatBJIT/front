@@ -21,13 +21,25 @@ const Sidebar = ({ close }) => {
 
 
 
-  const { loggedIn, setLoggedIn, role } = useContext(LoginContext);
+  const { userData, role, loggedIn, setLoggedIn, setRole } = useContext(LoginContext);
+
+  
+
+  // const [name, setName] = useState("User");
+
+  // useEffect(() => {
+  //   if (userData && userData.data && userData.data.data.role === "APPLICANT") {
+  //     setName(userData.data.data.data.firstName);
+  //   }
+  // }, [userData]);
+
 
 
   const logout = () => {
     window.localStorage.removeItem("tss-token")
 
     setLoggedIn(false);
+    setRole("");
 
   }
 
@@ -61,8 +73,23 @@ const Sidebar = ({ close }) => {
 
           </ListItem>
 
+          {role === "APPLICANT" &&
+            <ListItem disablePadding>
+              <Link flex={1} style={{ textDecoration: 'none', color: isActiveLink("/profile") }} component={NavLink} to="/profile" variant="ListItemButton"   >
+                <ListItemButton >
+                  <ListItemIcon>
+                    <Home />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+
+          }
+
+
           <ListItem disablePadding>
-            <Link flex={1} style={{ textDecoration: 'none', color: isActiveLink("/courses") }} component={ReactRouterLink} to="/courses" variant="ListItemButton" >
+            <Link flex={1} style={{ textDecoration: 'none', color: isActiveLink("/course") }} component={ReactRouterLink} to="/course" variant="ListItemButton" >
               <ListItemButton >
                 <ListItemIcon>
                   <School />

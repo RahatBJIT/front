@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { theme } from "../theme/theme";
-import { Menu, MenuItem, Badge, Box, InputBase, Container, Stack, AppBar, Toolbar, Typography, styled } from "@mui/material";
+import { Menu, Tooltip, MenuItem, Badge, Box, InputBase, Container, Stack, AppBar, Toolbar, Typography, styled } from "@mui/material";
 import { Mail, Notifications } from "@mui/icons-material";
 import { Avatar } from '../../node_modules/@mui/material/index';
 import { LoginContext } from '../context/LoginContex';
+import { useNavigate } from '../../node_modules/react-router-dom/dist/index';
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between"
@@ -37,16 +38,28 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 const Navbar = ({ courseNumber, onClose }) => {
 
-  const { loggedIn, setLoggedIn } = useContext(LoginContext);
+  const navigate = useNavigate();
+
+  const { loggedIn, setLoggedIn, userData, role, appliedCoursesGlobal, setappliedCoursesGlobal } = useContext(LoginContext);
 
   const logout = () => {
-     window.localStorage.removeItem("tss-token")
+    window.localStorage.removeItem("tss-token")
 
     setLoggedIn(false);
 
   }
 
   const [open, setOpen] = useState(false);
+
+
+
+  const [name, setName] = useState("User");
+
+  useEffect(() => {
+    if (userData && role === "APPLICANT") {
+      setName(userData.firstName)
+    }
+  }, [userData]);
 
 
 
@@ -61,12 +74,19 @@ const Navbar = ({ courseNumber, onClose }) => {
         <Search><InputBase placeholder='Search..' /></Search>
         <Icons>
 
-          <Badge badgeContent={4} color="error">
-            <Mail />
-          </Badge>
-          <Badge badgeContent={courseNumber ? courseNumber : 0} color="error">
-            <Notifications />
-          </Badge>
+          <Tooltip title={`You have applied ${appliedCoursesGlobal} courses`}>
+
+            <Badge badgeContent={appliedCoursesGlobal} color="error">
+              <Mail />
+            </Badge>
+          </Tooltip>
+
+          <Tooltip title={`There are ${courseNumber ? courseNumber : 0} courses available`}>
+
+            <Badge badgeContent={courseNumber ? courseNumber : 0} color="error">
+              <Notifications />
+            </Badge>
+          </Tooltip>
 
           <Avatar
             sx={{ width: 30, height: 30 }}
@@ -75,9 +95,13 @@ const Navbar = ({ courseNumber, onClose }) => {
           />
 
         </Icons>
-        <UserBox onClick={e => { setOpen(true) }}>
+        <UserBox onClick={e => { navigate("/profile") }}>
           <Avatar sx={{ width: 30, height: 30 }} src="https://www.w3schools.com/w3images/avatar2.png" />
-          <Typography variant="span">Rahat</Typography>
+          <Typography variant="span">
+
+            {name}
+
+          </Typography>
         </UserBox>
       </StyledToolbar>
 
@@ -90,9 +114,9 @@ const Navbar = ({ courseNumber, onClose }) => {
           vertical: 'top',
           horizontal: 'right',
         }}
-      
+
       >
-   
+
       </Menu>
     </AppBar>
 

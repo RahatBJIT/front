@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-// import axios from 'axios'; // Import axios library
 import FileService from '../services/FileService';
 import { LoginContext } from '../context/LoginContex';
 
@@ -44,16 +43,13 @@ const UploadFile = () => {
         const formDatacv = new FormData();
 
 
-        // Append the selected files to the FormData object
         formData.append('profile-picture', selectedImage);
 
 
         formDatacv.append('resume', selectedCV);
 
-        // Retrieve the token from local storage
         const token = window.localStorage.getItem("tss-token");
 
-        // Set the Authorization header with the Bearer token
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -64,7 +60,6 @@ const UploadFile = () => {
 
         FileService.uploadImage(formData, config)
             .then((response) => {
-                // Handle the response if needed
                 console.log(response.data);
                 setShowSuccessMessage(true);
                 setSelectedImage(null);
@@ -89,7 +84,6 @@ const UploadFile = () => {
 
         FileService.uploadCV(formDatacv, config)
             .then((response) => {
-                // Handle the response if needed
                 console.log(response.data);
                 setShowSuccessMessage(true);
                 setSelectedCV(null);
@@ -149,7 +143,7 @@ const UploadFile = () => {
                             <Alert variant="danger">{errorMessage}</Alert>
                         )}
 
-                        {(errorMessage && errorMessage == "") ? (
+                        {(errorMessage && errorMessage === "") ? (
                             <Alert variant="danger">{errorMessage}</Alert>
                         ) : null}
 
